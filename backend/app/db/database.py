@@ -1,9 +1,16 @@
 from sqlalchemy import create_engine
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
+from app.core.config import get_settings
 
-DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL)
+settings = get_settings()
+
+connect_args: dict[str, object] = {}
+if settings.database_url.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+
+engine = create_engine(
+    settings.database_url,
+    connect_args=connect_args,
+    pool_pre_ping=True,
+)

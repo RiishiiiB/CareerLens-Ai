@@ -2,7 +2,7 @@ from app.db.base import Base
 from app.db.database import engine
 
 # Import all models here
-from app.models.user import User
+from app.models import RefreshToken, User
 
 print("Creating tables...")
 

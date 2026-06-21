@@ -3,6 +3,12 @@ from app.db.database import engine
 
 # Import all models here
 from app.models import (
+    CandidateShortlist,
+    CompanyProfile,
+    DriveApplication,
+    JobPosting,
+    PlacementDrive,
+    RecruiterProfile,
     RefreshToken,
     Resume,
     StudentCertification,

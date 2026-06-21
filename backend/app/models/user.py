@@ -117,3 +117,15 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+
+    recruiter_profile = relationship(
+        "RecruiterProfile",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    created_drives = relationship(
+        "PlacementDrive",
+        back_populates="created_by",
+    )

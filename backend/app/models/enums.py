@@ -19,3 +19,40 @@ class SkillProficiency(str, Enum):
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
     EXPERT = "expert"
+
+
+class EmploymentType(str, Enum):
+    FULL_TIME = "full_time"
+    PART_TIME = "part_time"
+    INTERNSHIP = "internship"
+    CONTRACT = "contract"
+
+
+class JobStatus(str, Enum):
+    DRAFT = "draft"
+    OPEN = "open"
+    CLOSED = "closed"
+
+
+class ShortlistStatus(str, Enum):
+    SHORTLISTED = "shortlisted"
+    INTERVIEWING = "interviewing"
+    REJECTED = "rejected"
+    HIRED = "hired"
+
+
+class DriveStatus(str, Enum):
+    DRAFT = "draft"
+    OPEN = "open"
+    CLOSED = "closed"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+
+
+class ApplicationStatus(str, Enum):
+    REGISTERED = "registered"
+    UNDER_REVIEW = "under_review"
+    SHORTLISTED = "shortlisted"
+    REJECTED = "rejected"
+    SELECTED = "selected"
+    WITHDRAWN = "withdrawn"

@@ -50,7 +50,12 @@ def get_settings() -> Settings:
             30,
         ),
         refresh_token_expire_days=_get_int("REFRESH_TOKEN_EXPIRE_DAYS", 7),
-        upload_dir=Path(os.getenv("UPLOAD_DIR", "storage/resumes")),
+        upload_dir=Path(
+            os.getenv(
+                "UPLOAD_DIR",
+                str(Path(__file__).resolve().parents[2] / "storage" / "resumes"),
+            ),
+        ),
         max_resume_size_bytes=_get_int(
             "MAX_RESUME_SIZE_BYTES",
             5 * 1024 * 1024,

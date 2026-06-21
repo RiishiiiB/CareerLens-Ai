@@ -104,3 +104,16 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+
+    student_profile = relationship(
+        "StudentProfile",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    resumes = relationship(
+        "Resume",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )

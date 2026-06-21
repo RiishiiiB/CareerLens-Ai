@@ -1,3 +1,4 @@
+from app.models.ai import AIAnalysis
 from app.models.auth import RefreshToken
 from app.models.placement import DriveApplication, PlacementDrive
 from app.models.recruiter import (
@@ -17,6 +18,7 @@ from app.models.student import (
 from app.models.user import User
 
 __all__ = [
+    "AIAnalysis",
     "RefreshToken",
     "CandidateShortlist",
     "CompanyProfile",

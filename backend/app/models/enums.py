@@ -56,3 +56,10 @@ class ApplicationStatus(str, Enum):
     REJECTED = "rejected"
     SELECTED = "selected"
     WITHDRAWN = "withdrawn"
+
+
+class AIAnalysisType(str, Enum):
+    RESUME_SCORE = "resume_score"
+    SKILL_GAP = "skill_gap"
+    JOB_MATCH = "job_match"
+    STUDENT_RECOMMENDATION = "student_recommendation"

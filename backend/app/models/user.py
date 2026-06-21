@@ -129,3 +129,9 @@ class User(Base):
         "PlacementDrive",
         back_populates="created_by",
     )
+
+    ai_analyses = relationship(
+        "AIAnalysis",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )

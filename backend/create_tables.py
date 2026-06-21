@@ -3,6 +3,7 @@ from app.db.database import engine
 
 # Import all models here
 from app.models import (
+    AIAnalysis,
     CandidateShortlist,
     CompanyProfile,
     DriveApplication,

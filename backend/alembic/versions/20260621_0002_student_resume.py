@@ -50,7 +50,6 @@ def upgrade() -> None:
             ),
             sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         )
-        op.create_index("ix_student_profiles_id", "student_profiles", ["id"])
         op.create_index("ix_student_profiles_user_id", "student_profiles", ["user_id"])
 
     if "student_skills" not in tables:
@@ -77,7 +76,6 @@ def upgrade() -> None:
                 ondelete="CASCADE",
             ),
         )
-        op.create_index("ix_student_skills_id", "student_skills", ["id"])
         op.create_index(
             "ix_student_skills_profile_id",
             "student_skills",
@@ -103,7 +101,6 @@ def upgrade() -> None:
                 ondelete="CASCADE",
             ),
         )
-        op.create_index("ix_student_education_id", "student_education", ["id"])
         op.create_index(
             "ix_student_education_profile_id",
             "student_education",
@@ -125,11 +122,6 @@ def upgrade() -> None:
                 ["student_profiles.id"],
                 ondelete="CASCADE",
             ),
-        )
-        op.create_index(
-            "ix_student_certifications_id",
-            "student_certifications",
-            ["id"],
         )
         op.create_index(
             "ix_student_certifications_profile_id",
@@ -155,7 +147,6 @@ def upgrade() -> None:
                 ondelete="CASCADE",
             ),
         )
-        op.create_index("ix_student_projects_id", "student_projects", ["id"])
         op.create_index(
             "ix_student_projects_profile_id",
             "student_projects",
@@ -194,7 +185,6 @@ def upgrade() -> None:
                 ondelete="SET NULL",
             ),
         )
-        op.create_index("ix_resumes_id", "resumes", ["id"])
         op.create_index("ix_resumes_user_id", "resumes", ["user_id"])
         op.create_index(
             "ix_resumes_student_profile_id",

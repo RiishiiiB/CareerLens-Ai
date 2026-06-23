@@ -39,7 +39,6 @@ def upgrade() -> None:
         ),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
     )
-    op.create_index("ix_ai_analyses_id", "ai_analyses", ["id"])
     op.create_index("ix_ai_analyses_user_id", "ai_analyses", ["user_id"])
     op.create_index(
         "ix_ai_analyses_analysis_type",

@@ -54,7 +54,6 @@ def upgrade() -> None:
                 ondelete="SET NULL",
             ),
         )
-        op.create_index("ix_company_profiles_id", "company_profiles", ["id"])
         op.create_index("ix_company_profiles_name", "company_profiles", ["name"])
         op.create_index(
             "ix_company_profiles_owner_user_id",
@@ -93,7 +92,6 @@ def upgrade() -> None:
                 ondelete="SET NULL",
             ),
         )
-        op.create_index("ix_recruiter_profiles_id", "recruiter_profiles", ["id"])
         op.create_index(
             "ix_recruiter_profiles_user_id",
             "recruiter_profiles",
@@ -153,7 +151,6 @@ def upgrade() -> None:
                 ondelete="SET NULL",
             ),
         )
-        op.create_index("ix_job_postings_id", "job_postings", ["id"])
         op.create_index("ix_job_postings_title", "job_postings", ["title"])
         op.create_index("ix_job_postings_status", "job_postings", ["status"])
         op.create_index("ix_job_postings_company_id", "job_postings", ["company_id"])
@@ -203,11 +200,6 @@ def upgrade() -> None:
                 "student_profile_id",
                 name="uq_candidate_shortlist_job_student",
             ),
-        )
-        op.create_index(
-            "ix_candidate_shortlists_id",
-            "candidate_shortlists",
-            ["id"],
         )
         op.create_index(
             "ix_candidate_shortlists_job_id",
@@ -279,7 +271,6 @@ def upgrade() -> None:
                 ondelete="SET NULL",
             ),
         )
-        op.create_index("ix_placement_drives_id", "placement_drives", ["id"])
         op.create_index("ix_placement_drives_title", "placement_drives", ["title"])
         op.create_index("ix_placement_drives_status", "placement_drives", ["status"])
         op.create_index(
@@ -340,7 +331,6 @@ def upgrade() -> None:
                 name="uq_drive_application_drive_student",
             ),
         )
-        op.create_index("ix_drive_applications_id", "drive_applications", ["id"])
         op.create_index(
             "ix_drive_applications_drive_id",
             "drive_applications",

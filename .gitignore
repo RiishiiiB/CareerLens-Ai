@@ -19,6 +19,11 @@ backend/.env
 backend/.env
 backend/storage/
 backend/.test-packages/
+backend/.test-venv/
+backend/.test-storage/
+backend/*.db
+*.db
+.pytest_cache/
 storage/
 
 **/__pycache__/

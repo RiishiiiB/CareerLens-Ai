@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.ai import router as ai_router
 from app.api.auth import router as auth_router
 from app.api.placement import router as placement_router
@@ -11,6 +11,19 @@ from app.api.user import router as user_router
 app = FastAPI(
     title="CareerLens AI",
     version="1.0.0"
+)
+
+origins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(auth_router)

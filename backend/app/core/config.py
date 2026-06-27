@@ -47,7 +47,7 @@ def get_settings() -> Settings:
         jwt_algorithm=os.getenv("JWT_ALGORITHM", "HS256"),
         access_token_expire_minutes=_get_int(
             "ACCESS_TOKEN_EXPIRE_MINUTES",
-            30,
+            1440,
         ),
         refresh_token_expire_days=_get_int("REFRESH_TOKEN_EXPIRE_DAYS", 7),
         upload_dir=Path(

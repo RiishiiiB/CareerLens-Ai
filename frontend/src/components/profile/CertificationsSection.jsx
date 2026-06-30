@@ -4,30 +4,30 @@ import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import SkillModal from "./AddSkillModal";
+import CertificationModal from "./CertificationModal";
 
 import EmptyState from "../ui/EmptyState";
 import {
-  getSkills,
-  addSkill,
-  updateSkill,
-  deleteSkill,
-} from "../../services/skillService";
+  getCertifications,
+  addCertification,
+  updateCertification,
+  deleteCertification,
+} from "../../services/certificationService";
 
-const SkillsSection = () => {
-  const [skills, setSkills] = useState([]);
+const CertificationsSection = () => {
+  const [certifications, setCertifications] = useState([]);
   const [open, setOpen] = useState(false);
-  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [selectedCertification, setSelectedCertification] = useState(null);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/immutability
-    loadSkills();
+    loadCertifications();
   }, []);
 
-  const loadSkills = async () => {
+  const loadCertifications = async () => {
     try {
-      const data = await getSkills();
-      setSkills(data);
+      const data = await getCertifications();
+      setCertifications(data);
     } catch (err) {
       console.error(err);
     }
@@ -35,17 +35,17 @@ const SkillsSection = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      if (selectedSkill) {
-        await updateSkill(selectedSkill.id, formData);
-        toast.success("Skill updated successfully!");
+      if (selectedCertification) {
+        await updateCertification(selectedCertification.id, formData);
+        toast.success("Certification updated successfully!");
       } else {
-        await addSkill(formData);
-        toast.success("Skill added successfully!");
+        await addCertification(formData);
+        toast.success("Certification added successfully!");
       }
 
       setOpen(false);
-      setSelectedSkill(null);
-      loadSkills();
+      setSelectedCertification(null);
+      loadCertifications();
     } catch (err) {
       console.error(err);
       toast.error("Operation failed.");
@@ -53,15 +53,15 @@ const SkillsSection = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this skill?")) return;
+    if (!window.confirm("Delete this certification?")) return;
 
     try {
-      await deleteSkill(id);
-      toast.success("Skill deleted.");
-      loadSkills();
+      await deleteCertification(id);
+      toast.success("Certification deleted.");
+      loadCertifications();
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete skill.");
+      toast.error("Failed to delete certification.");
     }
   };
 
@@ -70,47 +70,51 @@ const SkillsSection = () => {
       <Card className="mt-8">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">
-            Skills
+            Certifications
           </h2>
 
           <Button
             onClick={() => {
-              setSelectedSkill(null);
+              setSelectedCertification(null);
               setOpen(true);
             }}
           >
             <Plus size={18} />
-            <span className="ml-2">Add Skill</span>
+            <span className="ml-2">Add Certification</span>
           </Button>
         </div>
 
         <div className="space-y-4">
-          {skills.length === 0 ? (
+          {certifications.length === 0 ? (
            
             <EmptyState
-              title="No Skills"
-                description="Add your first skill to strengthen your profile."
-                  />
+             title="No Certifications"
+              description="Highlight your certifications and achievements."
+                 />
           ) : (
-            skills.map((skill) => (
+            certifications.map((cert) => (
               <div
-                key={skill.id}
+                key={cert.id}
                 className="flex items-center justify-between rounded-xl bg-slate-800 p-4"
               >
                 <div>
                   <h3 className="font-medium text-white">
-                    {skill.name}
+                    {cert.name}
                   </h3>
 
-                  <p className="text-sm capitalize text-slate-400">
-                    {skill.proficiency} • {skill.years_experience} yrs
+                  <p className="text-slate-400">
+                    {cert.issuing_organization}
+                  </p>
+
+                  <p className="text-sm text-slate-500">
+                    {cert.issue_date}
                   </p>
                 </div>
 
                 <div className="flex gap-3">
                   <button
                     onClick={() => {
-                      setSelectedSkill(skill);
+                      setSelectedCertification(cert);
                       setOpen(true);
                     }}
                     className="text-blue-400 hover:text-blue-300"
@@ -119,7 +123,7 @@ const SkillsSection = () => {
                   </button>
 
                   <button
-                    onClick={() => handleDelete(skill.id)}
+                    onClick={() => handleDelete(cert.id)}
                     className="text-red-400 hover:text-red-300"
                   >
                     <Trash2 size={18} />
@@ -131,17 +135,17 @@ const SkillsSection = () => {
         </div>
       </Card>
 
-      <SkillModal
+      <CertificationModal
         open={open}
         onClose={() => {
           setOpen(false);
-          setSelectedSkill(null);
+          setSelectedCertification(null);
         }}
         onSubmit={handleSubmit}
-        initialData={selectedSkill}
+        initialData={selectedCertification}
       />
     </>
   );
 };
 
-export default SkillsSection;
+export default CertificationsSection;

@@ -1,9 +1,8 @@
-const Input = ({
+const Select = ({
   label,
-  type = "text",
-  placeholder,
   value,
   onChange,
+  options = [],
 }) => {
   return (
     <div className="space-y-2">
@@ -13,9 +12,7 @@ const Input = ({
         </label>
       )}
 
-      <input
-        type={type}
-        placeholder={placeholder}
+      <select
         value={value}
         onChange={onChange}
         className="
@@ -31,9 +28,18 @@ const Input = ({
           transition
           focus:border-blue-500
         "
-      />
+      >
+        {options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+          >
+            {option.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
 
-export default Input;
+export default Select;

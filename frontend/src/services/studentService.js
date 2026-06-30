@@ -11,7 +11,7 @@ export const createStudentProfile = async (profileData) => {
 };
 
 export const updateStudentProfile = async (profileData) => {
-  const response = await api.put("/students/profile", profileData);
+  const response = await api.patch("/students/profile", profileData);
   return response.data;
 };
 

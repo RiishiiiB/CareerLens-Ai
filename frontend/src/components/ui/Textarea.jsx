@@ -1,9 +1,9 @@
-const Input = ({
+const Textarea = ({
   label,
-  type = "text",
   placeholder,
   value,
   onChange,
+  rows = 4,
 }) => {
   return (
     <div className="space-y-2">
@@ -13,13 +13,14 @@ const Input = ({
         </label>
       )}
 
-      <input
-        type={type}
+      <textarea
+        rows={rows}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         className="
           w-full
+          resize-none
           rounded-lg
           border
           border-slate-700
@@ -36,4 +37,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default Textarea;

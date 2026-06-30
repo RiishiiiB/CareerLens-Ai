@@ -4,30 +4,30 @@ import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import SkillModal from "./AddSkillModal";
+import ProjectModal from "./ProjectModal";
 
 import EmptyState from "../ui/EmptyState";
 import {
-  getSkills,
-  addSkill,
-  updateSkill,
-  deleteSkill,
-} from "../../services/skillService";
+  getProjects,
+  addProject,
+  updateProject,
+  deleteProject,
+} from "../../services/projectService";
 
-const SkillsSection = () => {
-  const [skills, setSkills] = useState([]);
+const ProjectsSection = () => {
+  const [projects, setProjects] = useState([]);
   const [open, setOpen] = useState(false);
-  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/immutability
-    loadSkills();
+    loadProjects();
   }, []);
 
-  const loadSkills = async () => {
+  const loadProjects = async () => {
     try {
-      const data = await getSkills();
-      setSkills(data);
+      const data = await getProjects();
+      setProjects(data);
     } catch (err) {
       console.error(err);
     }
@@ -35,17 +35,17 @@ const SkillsSection = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      if (selectedSkill) {
-        await updateSkill(selectedSkill.id, formData);
-        toast.success("Skill updated successfully!");
+      if (selectedProject) {
+        await updateProject(selectedProject.id, formData);
+        toast.success("Project updated successfully!");
       } else {
-        await addSkill(formData);
-        toast.success("Skill added successfully!");
+        await addProject(formData);
+        toast.success("Project added successfully!");
       }
 
       setOpen(false);
-      setSelectedSkill(null);
-      loadSkills();
+      setSelectedProject(null);
+      loadProjects();
     } catch (err) {
       console.error(err);
       toast.error("Operation failed.");
@@ -53,15 +53,15 @@ const SkillsSection = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this skill?")) return;
+    if (!window.confirm("Delete this project?")) return;
 
     try {
-      await deleteSkill(id);
-      toast.success("Skill deleted.");
-      loadSkills();
+      await deleteProject(id);
+      toast.success("Project deleted.");
+      loadProjects();
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete skill.");
+      toast.error("Failed to delete project.");
     }
   };
 
@@ -70,47 +70,53 @@ const SkillsSection = () => {
       <Card className="mt-8">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">
-            Skills
+            Projects
           </h2>
 
           <Button
             onClick={() => {
-              setSelectedSkill(null);
+              setSelectedProject(null);
               setOpen(true);
             }}
           >
             <Plus size={18} />
-            <span className="ml-2">Add Skill</span>
+            <span className="ml-2">Add Project</span>
           </Button>
         </div>
 
         <div className="space-y-4">
-          {skills.length === 0 ? (
+          {projects.length === 0 ? (
            
             <EmptyState
-              title="No Skills"
-                description="Add your first skill to strengthen your profile."
-                  />
+              title="No Projects"
+             description="Showcase your projects to recruiters."
+               />
           ) : (
-            skills.map((skill) => (
+            projects.map((project) => (
               <div
-                key={skill.id}
+                key={project.id}
                 className="flex items-center justify-between rounded-xl bg-slate-800 p-4"
               >
                 <div>
                   <h3 className="font-medium text-white">
-                    {skill.name}
+                    {project.title}
                   </h3>
 
-                  <p className="text-sm capitalize text-slate-400">
-                    {skill.proficiency} • {skill.years_experience} yrs
+                  <p className="mt-1 text-sm text-slate-400">
+                    {project.description}
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    {Array.isArray(project.tech_stack)
+                      ? project.tech_stack.join(", ")
+                      : ""}
                   </p>
                 </div>
 
                 <div className="flex gap-3">
                   <button
                     onClick={() => {
-                      setSelectedSkill(skill);
+                      setSelectedProject(project);
                       setOpen(true);
                     }}
                     className="text-blue-400 hover:text-blue-300"
@@ -119,7 +125,7 @@ const SkillsSection = () => {
                   </button>
 
                   <button
-                    onClick={() => handleDelete(skill.id)}
+                    onClick={() => handleDelete(project.id)}
                     className="text-red-400 hover:text-red-300"
                   >
                     <Trash2 size={18} />
@@ -131,17 +137,17 @@ const SkillsSection = () => {
         </div>
       </Card>
 
-      <SkillModal
+      <ProjectModal
         open={open}
         onClose={() => {
           setOpen(false);
-          setSelectedSkill(null);
+          setSelectedProject(null);
         }}
         onSubmit={handleSubmit}
-        initialData={selectedSkill}
+        initialData={selectedProject}
       />
     </>
   );
 };
 
-export default SkillsSection;
+export default ProjectsSection;

@@ -4,30 +4,30 @@ import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import SkillModal from "./AddSkillModal";
-
+import EducationModal from "./EducationModal";
+ 
 import EmptyState from "../ui/EmptyState";
 import {
-  getSkills,
-  addSkill,
-  updateSkill,
-  deleteSkill,
-} from "../../services/skillService";
+  getEducation,
+  addEducation,
+  updateEducation,
+  deleteEducation,
+} from "../../services/educationService";
 
-const SkillsSection = () => {
-  const [skills, setSkills] = useState([]);
+const EducationSection = () => {
+  const [education, setEducation] = useState([]);
   const [open, setOpen] = useState(false);
-  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [selectedEducation, setSelectedEducation] = useState(null);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/immutability
-    loadSkills();
+    loadEducation();
   }, []);
 
-  const loadSkills = async () => {
+  const loadEducation = async () => {
     try {
-      const data = await getSkills();
-      setSkills(data);
+      const data = await getEducation();
+      setEducation(data);
     } catch (err) {
       console.error(err);
     }
@@ -35,17 +35,17 @@ const SkillsSection = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      if (selectedSkill) {
-        await updateSkill(selectedSkill.id, formData);
-        toast.success("Skill updated successfully!");
+      if (selectedEducation) {
+        await updateEducation(selectedEducation.id, formData);
+        toast.success("Education updated successfully!");
       } else {
-        await addSkill(formData);
-        toast.success("Skill added successfully!");
+        await addEducation(formData);
+        toast.success("Education added successfully!");
       }
 
       setOpen(false);
-      setSelectedSkill(null);
-      loadSkills();
+      setSelectedEducation(null);
+      loadEducation();
     } catch (err) {
       console.error(err);
       toast.error("Operation failed.");
@@ -53,15 +53,15 @@ const SkillsSection = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this skill?")) return;
+    if (!window.confirm("Delete this education?")) return;
 
     try {
-      await deleteSkill(id);
-      toast.success("Skill deleted.");
-      loadSkills();
+      await deleteEducation(id);
+      toast.success("Education deleted.");
+      loadEducation();
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to delete skill.");
+      toast.error("Failed to delete.");
     }
   };
 
@@ -70,57 +70,61 @@ const SkillsSection = () => {
       <Card className="mt-8">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">
-            Skills
+            Education
           </h2>
 
           <Button
             onClick={() => {
-              setSelectedSkill(null);
+              setSelectedEducation(null);
               setOpen(true);
             }}
           >
             <Plus size={18} />
-            <span className="ml-2">Add Skill</span>
+            <span className="ml-2">Add Education</span>
           </Button>
         </div>
 
         <div className="space-y-4">
-          {skills.length === 0 ? (
+          {education.length === 0 ? (
            
             <EmptyState
-              title="No Skills"
-                description="Add your first skill to strengthen your profile."
-                  />
+                 title="No Education"
+                  description="Add your educational qualifications."
+                 />
           ) : (
-            skills.map((skill) => (
+            education.map((item) => (
               <div
-                key={skill.id}
+                key={item.id}
                 className="flex items-center justify-between rounded-xl bg-slate-800 p-4"
               >
                 <div>
                   <h3 className="font-medium text-white">
-                    {skill.name}
+                    {item.degree}
                   </h3>
 
-                  <p className="text-sm capitalize text-slate-400">
-                    {skill.proficiency} • {skill.years_experience} yrs
+                  <p className="text-slate-400">
+                    {item.institution}
+                  </p>
+
+                  <p className="text-sm text-slate-500">
+                    {item.start_year} - {item.end_year}
                   </p>
                 </div>
 
                 <div className="flex gap-3">
                   <button
                     onClick={() => {
-                      setSelectedSkill(skill);
+                      setSelectedEducation(item);
                       setOpen(true);
                     }}
-                    className="text-blue-400 hover:text-blue-300"
+                    className="text-blue-400"
                   >
                     <Pencil size={18} />
                   </button>
 
                   <button
-                    onClick={() => handleDelete(skill.id)}
-                    className="text-red-400 hover:text-red-300"
+                    onClick={() => handleDelete(item.id)}
+                    className="text-red-400"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -131,17 +135,17 @@ const SkillsSection = () => {
         </div>
       </Card>
 
-      <SkillModal
+      <EducationModal
         open={open}
         onClose={() => {
           setOpen(false);
-          setSelectedSkill(null);
+          setSelectedEducation(null);
         }}
         onSubmit={handleSubmit}
-        initialData={selectedSkill}
+        initialData={selectedEducation}
       />
     </>
   );
 };
 
-export default SkillsSection;
+export default EducationSection;

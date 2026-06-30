@@ -7,15 +7,15 @@ import {
 
 import StatCard from "./cards/StatCard";
 
-const StatsGrid = ({ profile }) => {
+const StatsGrid = () => {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
-        title="Profile Completion"
-        value={`${profile?.profile_completion_score ?? 0}%`}
-        subtitle="Keep improving"
-        icon={UserCheck}
-      />
+  title="Portfolio Strength"
+  value="★★☆☆☆"
+  subtitle="Basic"
+  icon={UserCheck}
+/>
 
       <StatCard
         title="Resume Score"

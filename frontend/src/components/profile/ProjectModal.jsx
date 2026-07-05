@@ -51,29 +51,43 @@ const ProjectModal = ({
 
   if (!open) return null;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!form.title.trim()) {
-      toast.error("Project title is required.");
-      return;
-    }
+  if (!form.title.trim()) {
+    toast.error("Project title is required.");
+    return;
+  }
 
-    if (!form.repository_url.trim()) {
-      toast.error("GitHub Repository is required.");
-      return;
-    }
+  if (!form.repository_url.trim()) {
+    toast.error("GitHub Repository is required.");
+    return;
+  }
 
-    await onSubmit({
-      ...form,
-      tech_stack: form.tech_stack
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean),
-    });
+  const payload = {
+    title: form.title.trim(),
+    description: form.description.trim() || null,
 
-    onClose();
+    tech_stack: form.tech_stack
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean),
+
+    repository_url: form.repository_url.trim(),
+
+    project_url: form.project_url.trim()
+      ? form.project_url.trim()
+      : null,
+
+    start_date: form.start_date || null,
+
+    end_date: form.end_date || null,
   };
+
+  await onSubmit(payload);
+
+  onClose();
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

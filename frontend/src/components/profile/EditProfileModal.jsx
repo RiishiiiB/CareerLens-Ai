@@ -93,7 +93,8 @@ const EditProfileModal = ({
           />
 
           <Input
-            label="Portfolio URL"
+            label="Portfolio / LinkedIn URL"
+            placeholder="https://linkedin.com/in/yourname or https://yourportfolio.com"
             value={form.portfolio_url}
             onChange={(e) =>
               setForm({

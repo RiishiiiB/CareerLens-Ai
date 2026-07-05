@@ -102,18 +102,25 @@ const Profile = () => {
           </div>
 
           <div>
-            <p className="text-slate-400">LinkedIn</p>
-            <p className="text-white">
-              {profile?.linkedin_url || "Not Added"}
-            </p>
-          </div>
+  <p className="text-slate-400">
+    Professional Profile
+  </p>
 
-          <div>
-            <p className="text-slate-400">GitHub</p>
-            <p className="text-white">
-              {profile?.github_url || "Not Added"}
-            </p>
-          </div>
+  <p className="text-white">
+    {profile?.portfolio_url ? (
+      <a
+        href={profile.portfolio_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-400 hover:underline"
+      >
+        View Profile
+      </a>
+    ) : (
+      "Not Added"
+    )}
+  </p>
+</div>
         </div>
       </Card>
 

@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-
+import Resume from "./pages/Resume";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -28,6 +28,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/resume"
+          element={
+            <ProtectedRoute>
+              <Resume />
             </ProtectedRoute>
           }
         />

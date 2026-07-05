@@ -1,4 +1,5 @@
 import { Sparkles, Upload, Brain } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 import ProfileCompletionGauge from "./ProfileCompletionGauge";
@@ -7,6 +8,8 @@ const HeroSection = ({
   user,
   completion,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="mb-8 rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-8">
 
@@ -32,19 +35,23 @@ const HeroSection = ({
             personalized AI recommendations and career insights.
           </p>
 
-
           {/* Quick Actions */}
 
           <div className="mt-8 flex flex-wrap gap-4">
 
-            <Button>
+            <Button
+              onClick={() => navigate("/resume")}
+            >
               <Upload size={18} />
               <span className="ml-2">
                 Upload Resume
               </span>
             </Button>
 
-            <Button variant="secondary">
+            <Button
+              variant="secondary"
+              onClick={() => navigate("/resume-analyzer")}
+            >
               <Brain size={18} />
               <span className="ml-2">
                 Analyze Resume

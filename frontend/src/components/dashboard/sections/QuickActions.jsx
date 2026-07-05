@@ -36,7 +36,7 @@ const actions = [
   },
   {
     title: "Upload Resume",
-    path: "/dashboard",
+    path: "/resume",
     icon: FileText,
     color: "text-red-400",
   },

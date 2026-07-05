@@ -14,7 +14,6 @@ from app.models.user import User
 from app.schemas.resume import ResumeResponse
 from app.services.resume_service import ResumeService
 
-
 router = APIRouter(prefix="/resumes", tags=["Resumes"])
 
 
@@ -36,7 +35,10 @@ async def upload_resume(
     )
 
 
-@router.get("", response_model=list[ResumeResponse])
+@router.get(
+    "",
+    response_model=list[ResumeResponse],
+)
 def list_my_resumes(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[Session, Depends(get_db)],
@@ -44,25 +46,59 @@ def list_my_resumes(
     return ResumeService(db).list_my_resumes(current_user)
 
 
-@router.get("/{resume_id}", response_model=ResumeResponse)
+@router.get(
+    "/{resume_id}",
+    response_model=ResumeResponse,
+)
 def get_resume_metadata(
     resume_id: int,
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[Session, Depends(get_db)],
 ) -> Resume:
-    return ResumeService(db).get_resume(current_user, resume_id)
+    return ResumeService(db).get_resume(
+        current_user,
+        resume_id,
+    )
 
 
-@router.get("/{resume_id}/download", response_class=FileResponse)
+@router.get(
+    "/{resume_id}/download",
+    response_class=FileResponse,
+)
 def download_resume(
     resume_id: int,
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[Session, Depends(get_db)],
 ) -> FileResponse:
-    resume = ResumeService(db).get_resume(current_user, resume_id)
-    resume_path: Path = ResumeService(db).get_resume_path(current_user, resume_id)
+    service = ResumeService(db)
+
+    resume = service.get_resume(
+        current_user,
+        resume_id,
+    )
+
+    resume_path: Path = service.get_resume_path(
+        current_user,
+        resume_id,
+    )
+
     return FileResponse(
         path=resume_path,
         filename=resume.original_filename,
         media_type="application/pdf",
+    )
+
+
+@router.delete(
+    "/{resume_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_resume(
+    resume_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+) -> None:
+    ResumeService(db).delete_resume(
+        current_user,
+        resume_id,
     )

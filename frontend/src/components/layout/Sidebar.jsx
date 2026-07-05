@@ -57,6 +57,11 @@ const menuItems = [
     path: "/settings",
     icon: Settings,
   },
+  {
+  name: "Resume",
+  icon: FileText,
+  path: "/resume",
+}
 ];
 
 const Sidebar = () => {

@@ -4,7 +4,11 @@ from typing import Any
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from pathlib import Path
 
+from app.schemas.gemini import ResumeAnalysisResponse
+from app.services.gemini_service import GeminiService
+from app.services.resume_parser import ResumeParser
 from app.models.enums import AIAnalysisType, UserRole
 from app.models.recruiter import JobPosting
 from app.models.resume import Resume
@@ -184,7 +188,31 @@ class AIService:
             result.model_dump(mode="json"),
         )
         return result
+    def analyze_resume(self, current_user: User, resume_id: int) -> ResumeAnalysisResponse:
+        resume = self._get_resume_or_404(resume_id)
 
+        self._authorize_student_asset_read(
+            current_user,
+            resume.user_id,
+        )
+
+        resume_path = Path(resume.storage_path)
+
+        if not resume_path.exists():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Resume file not found.",
+            )
+
+        resume_text = ResumeParser.extract_text(str(resume_path))
+
+        if not resume_text.strip():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Unable to extract text from resume.",
+            )
+
+        return GeminiService().analyze_resume(resume_text)
     def _build_skill_gap(
         self,
         profile: StudentProfile,

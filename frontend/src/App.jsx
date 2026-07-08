@@ -6,7 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Resume from "./pages/Resume";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
+import ResumeAnalyzer from "./pages/ResumeAnalyzer";
+import SkillGap from "./pages/SkillGap";
+import CareerRoadmap from "./pages/CareerRoadmap";
 function App() {
   return (
     <BrowserRouter>
@@ -40,6 +42,30 @@ function App() {
             </ProtectedRoute>
           }
         />
+          <Route
+      path="/resume-analyzer"
+      element={
+        <ProtectedRoute>
+          <ResumeAnalyzer />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+    path="/skill-gap"
+    element={
+        <ProtectedRoute>
+            <SkillGap />
+        </ProtectedRoute>
+    }
+/>
+    <Route
+    path="/career-roadmap"
+    element={
+        <ProtectedRoute>
+            <CareerRoadmap />
+        </ProtectedRoute>
+    }
+/>
       </Routes>
     </BrowserRouter>
   );

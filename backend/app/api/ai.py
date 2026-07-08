@@ -4,7 +4,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-
+from app.schemas.gemini import ResumeAnalysisResponse
 from app.core.dependencies import get_current_user
 from app.db.session import get_db
 from app.models.user import User
@@ -61,3 +61,17 @@ def recommend_students(
     db: Annotated[Session, Depends(get_db)],
 ) -> StudentRecommendationResponse:
     return AIService(db).recommend_students(current_user, payload)
+
+@router.post(
+    "/analyze-resume/{resume_id}",
+    response_model=ResumeAnalysisResponse,
+)
+def analyze_resume(
+    resume_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+) -> ResumeAnalysisResponse:
+    return AIService(db).analyze_resume(
+        current_user,
+        resume_id,
+    )

@@ -9,3 +9,11 @@ export const analyzeSkillGap = async (payload) => {
   const response = await api.post("/ai/skill-gap", payload);
   return response.data;
 };
+
+export const generateCareerRoadmap = async (role) => {
+  const response = await api.post(
+    `/ai/career-roadmap/${encodeURIComponent(role)}`
+  );
+
+  return response.data;
+};

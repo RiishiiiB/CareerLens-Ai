@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import RoadmapTimeline from "../components/roadmap/RoadmapTimeline";
+import { generateCareerRoadmap } from "../services/aiService";
 
 const roles = [
   "Frontend Developer",
@@ -14,6 +16,30 @@ const roles = [
 
 export default function CareerRoadmap() {
   const [role, setRole] = useState("");
+  const [roadmap, setRoadmap] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    if (!role) {
+      toast.error("Please select a target role");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const data = await generateCareerRoadmap(role);
+
+      setRoadmap(data);
+
+      toast.success("Career roadmap generated successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to generate roadmap");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -48,13 +74,15 @@ export default function CareerRoadmap() {
           </select>
 
           <button
-            className="mt-6 rounded-xl bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700"
+            onClick={handleGenerate}
+            disabled={loading}
+            className="mt-6 rounded-xl bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
           >
-            Generate Roadmap
+            {loading ? "Generating..." : "Generate Roadmap"}
           </button>
         </div>
 
-        <RoadmapTimeline />
+        {roadmap && <RoadmapTimeline roadmap={roadmap} />}
       </div>
     </DashboardLayout>
   );

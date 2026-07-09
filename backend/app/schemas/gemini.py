@@ -12,3 +12,16 @@ class ResumeAnalysisResponse(BaseModel):
 
     summary: str
     verdict: str
+
+
+class RoadmapMonth(BaseModel):
+    month: str
+    focus: str
+    tasks: list[str]
+
+
+class CareerRoadmapResponse(BaseModel):
+    role: str
+    duration: str
+    months: list[RoadmapMonth]
+    summary: str

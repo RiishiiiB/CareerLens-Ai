@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from google import genai
 
-from app.schemas.gemini import ResumeAnalysisResponse
+from app.schemas.gemini import ResumeAnalysisResponse, CareerRoadmapResponse
 
 load_dotenv()
 
@@ -82,3 +82,55 @@ Resume:
             summary=data.get("summary", ""),
             verdict=data.get("verdict", ""),
         )
+
+    async def generate_career_roadmap(self, role: str) -> CareerRoadmapResponse:
+        prompt = f"""
+You are an expert career mentor.
+
+Generate a structured 3-month learning roadmap for becoming a {role}.
+
+Return ONLY valid JSON.
+
+Format:
+
+{{
+    "role": "{role}",
+    "duration": "3 Months",
+    "months": [
+        {{
+            "month": "Month 1",
+            "focus": "",
+            "tasks": []
+        }},
+        {{
+            "month": "Month 2",
+            "focus": "",
+            "tasks": []
+        }},
+        {{
+            "month": "Month 3",
+            "focus": "",
+            "tasks": []
+        }}
+    ],
+    "summary": ""
+}}
+"""
+
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
+
+        text = response.text.strip()
+
+        if text.startswith("```"):
+            text = (
+                text.replace("```json", "")
+                .replace("```", "")
+                .strip()
+            )
+
+        data = json.loads(text)
+
+        return CareerRoadmapResponse(**data)

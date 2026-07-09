@@ -4,7 +4,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.schemas.gemini import ResumeAnalysisResponse
+from app.schemas.gemini import (
+    ResumeAnalysisResponse,
+    CareerRoadmapResponse,
+)
 from app.core.dependencies import get_current_user
 from app.db.session import get_db
 from app.models.user import User
@@ -75,3 +78,13 @@ def analyze_resume(
         current_user,
         resume_id,
     )
+@router.post(
+    "/career-roadmap/{role}",
+    response_model=CareerRoadmapResponse,
+)
+async def generate_career_roadmap(
+    role: str,
+):
+    from app.services.gemini_service import GeminiService
+
+    return await GeminiService().generate_career_roadmap(role)

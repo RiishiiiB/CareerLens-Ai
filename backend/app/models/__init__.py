@@ -16,7 +16,7 @@ from app.models.student import (
     StudentSkill,
 )
 from app.models.user import User
-
+from .application import Application
 __all__ = [
     "AIAnalysis",
     "RefreshToken",

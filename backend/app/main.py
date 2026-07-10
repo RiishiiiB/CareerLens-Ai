@@ -7,7 +7,7 @@ from app.api.recruiters import router as recruiters_router
 from app.api.resumes import router as resumes_router
 from app.api.students import router as students_router
 from app.api.user import router as user_router
-
+from app.api.application import router as application_router
 app = FastAPI(
     title="CareerLens AI",
     version="1.0.0"
@@ -33,7 +33,7 @@ app.include_router(resumes_router)
 app.include_router(recruiters_router)
 app.include_router(placement_router)
 app.include_router(ai_router)
-
+app.include_router(application_router)
 
 @app.get("/")
 def root() -> dict[str, str]:

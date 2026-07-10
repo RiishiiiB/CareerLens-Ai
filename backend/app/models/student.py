@@ -63,7 +63,12 @@ class StudentProfile(Base):
         cascade="all, delete-orphan",
     )
     resumes = relationship("Resume", back_populates="student_profile")
-
+    
+    applications = relationship(
+    "Application",
+    back_populates="student",
+    cascade="all, delete-orphan",
+)
 
 class StudentSkill(Base):
     __tablename__ = "student_skills"

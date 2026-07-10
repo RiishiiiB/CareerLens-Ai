@@ -25,3 +25,17 @@ class CareerRoadmapResponse(BaseModel):
     duration: str
     months: list[RoadmapMonth]
     summary: str
+
+
+class CompanyRecommendation(BaseModel):
+    company: str
+    package: str
+    hiring: str
+    required_skills: list[str]
+    reason: str
+    career_url: str
+
+
+class CompanyRecommendationResponse(BaseModel):
+    role: str
+    companies: list[CompanyRecommendation]

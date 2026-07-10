@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.schemas.gemini import (
     ResumeAnalysisResponse,
     CareerRoadmapResponse,
+    CompanyRecommendationResponse,
 )
 from app.core.dependencies import get_current_user
 from app.db.session import get_db
@@ -88,3 +89,13 @@ async def generate_career_roadmap(
     from app.services.gemini_service import GeminiService
 
     return await GeminiService().generate_career_roadmap(role)
+@router.post(
+    "/company-recommendations/{role}",
+    response_model=CompanyRecommendationResponse,
+)
+async def generate_company_recommendations(
+    role: str,
+):
+    from app.services.gemini_service import GeminiService
+
+    return await GeminiService().generate_company_recommendations(role)

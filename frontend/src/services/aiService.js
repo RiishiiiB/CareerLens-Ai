@@ -17,3 +17,11 @@ export const generateCareerRoadmap = async (role) => {
 
   return response.data;
 };
+
+export const generateCompanyRecommendations = async (role) => {
+  const response = await api.post(
+    `/ai/company-recommendations/${encodeURIComponent(role)}`
+  );
+
+  return response.data;
+};

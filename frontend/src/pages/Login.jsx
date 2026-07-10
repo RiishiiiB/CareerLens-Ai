@@ -1,86 +1,78 @@
 import { useState } from "react";
-import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+
+import GlowBackground from "../components/ui/GlowBackground";
+import GlassCard from "../components/ui/GlassCard";
+import AuthHero from "../components/auth/AuthHero";
+import LoginForm from "../components/auth/LoginForm";
+
 export default function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-  try {
-    const response = await api.post("/auth/login", {
-      email,
-      password,
-    });
+    try {
+      setLoading(true);
+      setMessage("");
 
-    console.log("FULL RESPONSE");
-    console.log(response);
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-    console.log("DATA");
-    console.log(response.data);
+      localStorage.setItem(
+        "access_token",
+        response.data.tokens.access_token
+      );
 
-    console.log("TOKENS");
-    console.log(response.data.tokens);
+      localStorage.setItem(
+        "refresh_token",
+        response.data.tokens.refresh_token
+      );
 
-    console.log("ACCESS TOKEN");
-    console.log(response.data.tokens.access_token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(response.data.user)
+      );
 
-    localStorage.setItem(
-      "access_token",
-      response.data.tokens.access_token
-    );
-localStorage.setItem(
-  "refresh_token",
-  response.data.tokens.refresh_token
-);
-    localStorage.setItem(
-  "user",
-  JSON.stringify(response.data.user)
-);
-
-    setMessage("Login Successful ✅");
-    navigate("/dashboard");
-  } catch (error) {
-    console.log("ERROR:");
-    console.log(error);
-
-    console.log("ERROR RESPONSE:");
-    console.log(error.response);
-
-    setMessage(error.response?.data?.detail || "Login Failed ❌");
-  }
-};
+      navigate("/dashboard");
+    } catch (error) {
+      setMessage(
+        error.response?.data?.detail || "Login Failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      <h1>CareerLens AI Login</h1>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6">
+      <GlowBackground />
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-16 lg:grid-cols-2">
 
-      <br /><br />
+        <AuthHero />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <GlassCard className="flex items-center justify-center p-10 lg:p-14">
 
-      <br /><br />
+          <LoginForm
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            loading={loading}
+            message={message}
+            onLogin={handleLogin}
+          />
 
-      <button onClick={handleLogin}>
-        Login
-      </button>
+        </GlassCard>
 
-      <br /><br />
-
-      <p>{message}</p>
+      </div>
     </div>
   );
 }

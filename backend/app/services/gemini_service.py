@@ -4,7 +4,11 @@ import os
 from dotenv import load_dotenv
 from google import genai
 
-from app.schemas.gemini import ResumeAnalysisResponse, CareerRoadmapResponse
+from app.schemas.gemini import (
+    ResumeAnalysisResponse,
+    CareerRoadmapResponse,
+    CompanyRecommendationResponse,
+)
 
 load_dotenv()
 
@@ -134,3 +138,54 @@ Format:
         data = json.loads(text)
 
         return CareerRoadmapResponse(**data)
+
+    async def generate_company_recommendations(self, role: str) -> CompanyRecommendationResponse:
+        prompt = f"""
+You are an expert career advisor.
+
+Recommend the best companies for a {role}.
+
+Return ONLY valid JSON.
+
+Format:
+
+{{
+  "role": "{role}",
+  "companies": [
+    {{
+      "company": "",
+      "package": "",
+      "hiring": "",
+      "required_skills": [],
+      "reason": "",
+      "career_url": ""
+    }}
+  ]
+}}
+
+Requirements:
+
+- Recommend exactly 8 companies.
+- Prefer globally recognized companies and top Indian companies.
+- Mention realistic average fresher package.
+- Hiring should be either "Yes", "Likely", or "Limited".
+- career_url must be the official careers page.
+"""
+
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
+
+        text = response.text.strip()
+
+        if text.startswith("```"):
+            text = (
+                text.replace("```json", "")
+                .replace("```", "")
+                .strip()
+            )
+
+        data = json.loads(text)
+
+        return CompanyRecommendationResponse(**data)

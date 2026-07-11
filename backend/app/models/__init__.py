@@ -17,6 +17,7 @@ from app.models.student import (
 )
 from app.models.user import User
 from .application import Application
+from .mock_interview import MockInterview
 __all__ = [
     "AIAnalysis",
     "RefreshToken",

@@ -6,8 +6,8 @@ import {
   Brain,
   Map,
   Building2,
-  Briefcase,
   Mic,
+  Briefcase,
   Settings,
 } from "lucide-react";
 
@@ -61,7 +61,7 @@ const menuItems = [
   name: "Resume",
   icon: FileText,
   path: "/resume",
-}
+},
 ];
 
 const Sidebar = () => {

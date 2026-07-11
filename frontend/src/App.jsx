@@ -10,7 +10,8 @@ import SkillGap from "./pages/SkillGap";
 import CareerRoadmap from "./pages/CareerRoadmap";
 import Companies from "./pages/Companies";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
+import Applications from "./pages/Applications";
+import MockInterview from "./pages/MockInterview";
 function App() {
   return (
     <BrowserRouter>
@@ -81,6 +82,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+    path="/applications"
+    element={
+        <ProtectedRoute>
+            <Applications />
+        </ProtectedRoute>
+    }
+/>
+<Route
+  path="/mock-interview"
+  element={
+    <ProtectedRoute>
+      <MockInterview />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );

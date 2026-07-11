@@ -69,7 +69,11 @@ class StudentProfile(Base):
     back_populates="student",
     cascade="all, delete-orphan",
 )
-
+    mock_interviews = relationship(
+    "MockInterview",
+    back_populates="profile",
+    cascade="all, delete-orphan",
+)
 class StudentSkill(Base):
     __tablename__ = "student_skills"
 

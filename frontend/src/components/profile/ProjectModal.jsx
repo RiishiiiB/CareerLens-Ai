@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 
@@ -49,152 +50,145 @@ const ProjectModal = ({
     }
   }, [open, initialData]);
 
-  if (!open) return null;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+    if (!form.title.trim()) {
+      toast.error("Project title is required.");
+      return;
+    }
 
-  if (!form.title.trim()) {
-    toast.error("Project title is required.");
-    return;
-  }
+    if (!form.repository_url.trim()) {
+      toast.error("GitHub Repository is required.");
+      return;
+    }
 
-  if (!form.repository_url.trim()) {
-    toast.error("GitHub Repository is required.");
-    return;
-  }
+    const payload = {
+      title: form.title.trim(),
+      description: form.description.trim() || null,
+      tech_stack: form.tech_stack
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean),
+      repository_url: form.repository_url.trim(),
+      project_url: form.project_url.trim() || null,
+      start_date: form.start_date || null,
+      end_date: form.end_date || null,
+    };
 
-  const payload = {
-    title: form.title.trim(),
-    description: form.description.trim() || null,
-
-    tech_stack: form.tech_stack
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean),
-
-    repository_url: form.repository_url.trim(),
-
-    project_url: form.project_url.trim()
-      ? form.project_url.trim()
-      : null,
-
-    start_date: form.start_date || null,
-
-    end_date: form.end_date || null,
+    await onSubmit(payload);
+    onClose();
   };
 
-  await onSubmit(payload);
-
-  onClose();
-};
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-3xl rounded-xl bg-white p-6">
-        <h2 className="mb-6 text-2xl font-semibold">
-          {initialData ? "Edit Project" : "Add Project"}
-        </h2>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initialData ? "Edit Project" : "Add Project"}
+      maxWidth="max-w-3xl"
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          label="Project Title"
+          value={form.title}
+          onChange={(e) =>
+            setForm({ ...form, title: e.target.value })
+          }
+        />
+
+        <Input
+          label="Description"
+          value={form.description}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              description: e.target.value,
+            })
+          }
+        />
+
+        <Input
+          label="Tech Stack"
+          value={form.tech_stack}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              tech_stack: e.target.value,
+            })
+          }
+        />
+
+        <Input
+          label="GitHub Repository"
+          placeholder="https://github.com/username/repository"
+          value={form.repository_url}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              repository_url: e.target.value,
+            })
+          }
+        />
+
+        <Input
+          label="Live Project URL (Optional)"
+          placeholder="https://example.com"
+          value={form.project_url}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              project_url: e.target.value,
+            })
+          }
+        />
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 
           <Input
-            label="Project Title"
-            value={form.title}
-            onChange={(e) =>
-              setForm({ ...form, title: e.target.value })
-            }
-          />
-
-          <Input
-            label="Description"
-            value={form.description}
+            type="date"
+            label="Start Date"
+            value={form.start_date}
             onChange={(e) =>
               setForm({
                 ...form,
-                description: e.target.value,
+                start_date: e.target.value,
               })
             }
           />
 
           <Input
-            label="Tech Stack"
-            value={form.tech_stack}
+            type="date"
+            label="End Date"
+            value={form.end_date}
             onChange={(e) =>
               setForm({
                 ...form,
-                tech_stack: e.target.value,
+                end_date: e.target.value,
               })
             }
           />
 
-          <Input
-            label="GitHub Repository"
-            placeholder="https://github.com/username/repository"
-            value={form.repository_url}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                repository_url: e.target.value,
-              })
-            }
-          />
+        </div>
 
-          <Input
-            label="Live Project URL (Optional)"
-            placeholder="https://example.com"
-            value={form.project_url}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                project_url: e.target.value,
-              })
-            }
-          />
+        <div className="flex justify-end gap-3 pt-2">
 
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              type="date"
-              label="Start Date"
-              value={form.start_date}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  start_date: e.target.value,
-                })
-              }
-            />
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
 
-            <Input
-              type="date"
-              label="End Date"
-              value={form.end_date}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  end_date: e.target.value,
-                })
-              }
-            />
-          </div>
+          <Button type="submit">
+            {initialData ? "Update" : "Add"}
+          </Button>
 
-          <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
+        </div>
 
-            <Button type="submit">
-              {initialData ? "Update" : "Add"}
-            </Button>
-          </div>
-
-        </form>
-      </div>
-    </div>
+      </form>
+    </Modal>
   );
 };
 

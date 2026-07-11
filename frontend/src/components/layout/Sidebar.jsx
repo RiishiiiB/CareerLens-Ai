@@ -8,7 +8,6 @@ import {
   Building2,
   Mic,
   Briefcase,
-  Settings,
 } from "lucide-react";
 
 const menuItems = [
@@ -52,11 +51,7 @@ const menuItems = [
     path: "/mock-interview",
     icon: Mic,
   },
-  {
-    name: "Settings",
-    path: "/settings",
-    icon: Settings,
-  },
+ 
   {
   name: "Resume",
   icon: FileText,

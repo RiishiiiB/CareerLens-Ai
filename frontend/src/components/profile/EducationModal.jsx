@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 
@@ -47,8 +48,6 @@ const EducationModal = ({
     }
   }, [open, initialData]);
 
-  if (!open) return null;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -62,101 +61,105 @@ const EducationModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-2xl rounded-xl bg-white p-6">
-        <h2 className="mb-6 text-2xl font-semibold">
-          {initialData ? "Edit Education" : "Add Education"}
-        </h2>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initialData ? "Edit Education" : "Add Education"}
+      maxWidth="max-w-2xl"
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Institution"
-            value={form.institution}
-            onChange={(e) =>
-              setForm({ ...form, institution: e.target.value })
-            }
-          />
+        <Input
+          label="Institution"
+          value={form.institution}
+          onChange={(e) =>
+            setForm({ ...form, institution: e.target.value })
+          }
+        />
 
-          <Input
-            label="Degree"
-            value={form.degree}
-            onChange={(e) =>
-              setForm({ ...form, degree: e.target.value })
-            }
-          />
+        <Input
+          label="Degree"
+          value={form.degree}
+          onChange={(e) =>
+            setForm({ ...form, degree: e.target.value })
+          }
+        />
 
+        <Input
+          label="Field of Study"
+          value={form.field_of_study}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              field_of_study: e.target.value,
+            })
+          }
+        />
+
+        <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Field of Study"
-            value={form.field_of_study}
+            type="number"
+            label="Start Year"
+            value={form.start_year}
             onChange={(e) =>
               setForm({
                 ...form,
-                field_of_study: e.target.value,
+                start_year: Number(e.target.value),
               })
             }
           />
 
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              type="number"
-              label="Start Year"
-              value={form.start_year}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  start_year: Number(e.target.value),
-                })
-              }
-            />
-
-            <Input
-              type="number"
-              label="End Year"
-              value={form.end_year}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  end_year: Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
           <Input
-            label="Grade / CGPA"
-            value={form.grade}
-            onChange={(e) =>
-              setForm({ ...form, grade: e.target.value })
-            }
-          />
-
-          <Input
-            label="Description"
-            value={form.description}
+            type="number"
+            label="End Year"
+            value={form.end_year}
             onChange={(e) =>
               setForm({
                 ...form,
-                description: e.target.value,
+                end_year: Number(e.target.value),
               })
             }
           />
+        </div>
 
-          <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
+        <Input
+          label="Grade / CGPA"
+          value={form.grade}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              grade: e.target.value,
+            })
+          }
+        />
 
-            <Button type="submit">
-              {initialData ? "Update" : "Add"}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <Input
+          label="Description"
+          value={form.description}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              description: e.target.value,
+            })
+          }
+        />
+
+        <div className="flex justify-end gap-3 pt-2">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+
+          <Button type="submit">
+            {initialData ? "Update" : "Add"}
+          </Button>
+        </div>
+
+      </form>
+    </Modal>
   );
 };
 

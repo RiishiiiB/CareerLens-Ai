@@ -1,24 +1,48 @@
 @import "tailwindcss";
-/* ============================
-   Chrome Autofill Fix
-============================ */
+
+/* ==========================================
+   GLOBAL FORM CONTROLS
+========================================== */
 
 input,
 textarea,
 select {
-  background: transparent;
+  color: inherit;
+  background-color: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   DARK INPUTS ONLY
+========================================== */
+
+.dark input,
+.dark textarea,
+.dark select,
+[class*="bg-slate"] input,
+[class*="bg-slate"] textarea,
+[class*="bg-slate"] select,
+[class*="bg-[#"] input,
+[class*="bg-[#"] textarea,
+[class*="bg-[#"] select {
   color: #F8FAFC;
 }
+
+/* ==========================================
+   CHROME AUTOFILL FIX
+========================================== */
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
+textarea:-webkit-autofill,
+select:-webkit-autofill {
   -webkit-text-fill-color: #F8FAFC !important;
-
-  -webkit-box-shadow: 0 0 0px 1000px #111111 inset !important;
-
-  box-shadow: 0 0 0px 1000px #111111 inset !important;
-
+  -webkit-box-shadow: 0 0 0 1000px #111111 inset !important;
+  box-shadow: 0 0 0 1000px #111111 inset !important;
   transition: background-color 99999s ease-in-out 0s;
 }

@@ -8,7 +8,7 @@ const Input = ({
   return (
     <div className="space-y-2">
       {label && (
-        <label className="block text-sm font-medium text-slate-700">
+        <label className="mb-2 block text-sm font-medium text-slate-200">
           {label}
         </label>
       )}

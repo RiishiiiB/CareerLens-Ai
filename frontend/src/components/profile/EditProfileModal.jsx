@@ -42,23 +42,31 @@ const EditProfileModal = ({
       await onSave(form);
       toast.success("Profile updated successfully!");
       onClose();
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to update profile.");
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-2xl rounded-xl bg-white p-6">
-        <h2 className="mb-6 text-2xl font-semibold">
-          Edit Profile
-        </h2>
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm p-4">
+      <div className="mx-auto my-10 w-full max-w-2xl rounded-2xl border border-white/10 bg-[#151515] shadow-2xl">
+
+        <div className="border-b border-white/10 px-8 py-6">
+          <h2 className="text-3xl font-bold text-white">
+            Edit Profile
+          </h2>
+
+          <p className="mt-2 text-slate-400">
+            Update your professional information.
+          </p>
+        </div>
 
         <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
+  onSubmit={handleSubmit}
+  className="max-h-[75vh] overflow-y-auto space-y-5 px-8 py-8"
+>
+        
           <Input
             label="Headline"
             value={form.headline}
@@ -94,7 +102,7 @@ const EditProfileModal = ({
 
           <Input
             label="Portfolio / LinkedIn URL"
-            placeholder="https://linkedin.com/in/yourname or https://yourportfolio.com"
+            placeholder="https://linkedin.com/in/yourname"
             value={form.portfolio_url}
             onChange={(e) =>
               setForm({
@@ -128,7 +136,7 @@ const EditProfileModal = ({
             }
           />
 
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-4 border-t border-white/10 pt-6">
             <Button
               type="button"
               variant="secondary"
@@ -142,6 +150,7 @@ const EditProfileModal = ({
             </Button>
           </div>
         </form>
+
       </div>
     </div>
   );

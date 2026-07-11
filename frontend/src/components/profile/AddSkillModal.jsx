@@ -1,10 +1,11 @@
-
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
+
 export default function SkillModal({
   open,
   onClose,
@@ -36,8 +37,6 @@ export default function SkillModal({
     }
   }, [open, initialData]);
 
-  if (!open) return null;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -51,66 +50,69 @@ export default function SkillModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-xl bg-white p-6">
-        <h2 className="mb-5 text-xl font-semibold">
-          {initialData ? "Edit Skill" : "Add Skill"}
-        </h2>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initialData ? "Edit Skill" : "Add Skill"}
+      maxWidth="max-w-lg"
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Skill"
-            value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
-          />
+        <Input
+          label="Skill"
+          value={form.name}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              name: e.target.value,
+            })
+          }
+        />
 
-          // eslint-disable-next-line no-undef, no-undef
-          <Select
-  label="Proficiency"
-  value={form.proficiency}
-  onChange={(e) =>
-    setForm({
-      ...form,
-      proficiency: e.target.value,
-    })
-  }
-  options={[
-    { label: "Beginner", value: "beginner" },
-    { label: "Intermediate", value: "intermediate" },
-    { label: "Advanced", value: "advanced" },
-    { label: "Expert", value: "expert" },
-  ]}
-/>
+        <Select
+          label="Proficiency"
+          value={form.proficiency}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              proficiency: e.target.value,
+            })
+          }
+          options={[
+            { label: "Beginner", value: "beginner" },
+            { label: "Intermediate", value: "intermediate" },
+            { label: "Advanced", value: "advanced" },
+            { label: "Expert", value: "expert" },
+          ]}
+        />
 
-          <Input
-            type="number"
-            label="Years of Experience"
-            value={form.years_experience}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                years_experience: Number(e.target.value),
-              })
-            }
-          />
+        <Input
+          type="number"
+          label="Years of Experience"
+          value={form.years_experience}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              years_experience: Number(e.target.value),
+            })
+          }
+        />
 
-          <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
+        <div className="flex justify-end gap-3 pt-2">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
 
-            <Button type="submit">
-              {initialData ? "Update" : "Add"}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+          <Button type="submit">
+            {initialData ? "Update" : "Add"}
+          </Button>
+        </div>
+
+      </form>
+    </Modal>
   );
 }

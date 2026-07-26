@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus} from "lucide-react";
 import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
 import ProjectModal from "./ProjectModal";
-
+import ProjectCard from "./ProjectCard";
 import EmptyState from "../ui/EmptyState";
 import {
   getProjects,
@@ -93,46 +93,16 @@ const ProjectsSection = () => {
                />
           ) : (
             projects.map((project) => (
-              <div
-                key={project.id}
-                className="flex items-center justify-between rounded-xl bg-slate-800 p-4"
-              >
-                <div>
-                  <h3 className="font-medium text-white">
-                    {project.title}
-                  </h3>
-
-                  <p className="mt-1 text-sm text-slate-400">
-                    {project.description}
-                  </p>
-
-                  <p className="mt-1 text-xs text-slate-500">
-                    {Array.isArray(project.tech_stack)
-                      ? project.tech_stack.join(", ")
-                      : ""}
-                  </p>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setSelectedProject(project);
-                      setOpen(true);
-                    }}
-                    className="text-blue-400 hover:text-blue-300"
-                  >
-                    <Pencil size={18} />
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(project.id)}
-                    className="text-red-400 hover:text-red-300"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))
+  <ProjectCard
+    key={project.id}
+    project={project}
+    onEdit={() => {
+      setSelectedProject(project);
+      setOpen(true);
+    }}
+    onDelete={() => handleDelete(project.id)}
+  />
+))
           )}
         </div>
       </Card>

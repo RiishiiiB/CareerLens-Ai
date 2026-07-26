@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
 import EducationModal from "./EducationModal";
- 
+import EducationCard from "./EducationCard";
 import EmptyState from "../ui/EmptyState";
 import {
   getEducation,
@@ -93,44 +93,16 @@ const EducationSection = () => {
                  />
           ) : (
             education.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between rounded-xl bg-slate-800 p-4"
-              >
-                <div>
-                  <h3 className="font-medium text-white">
-                    {item.degree}
-                  </h3>
-
-                  <p className="text-slate-400">
-                    {item.institution}
-                  </p>
-
-                  <p className="text-sm text-slate-500">
-                    {item.start_year} - {item.end_year}
-                  </p>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setSelectedEducation(item);
-                      setOpen(true);
-                    }}
-                    className="text-blue-400"
-                  >
-                    <Pencil size={18} />
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="text-red-400"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))
+  <EducationCard
+    key={item.id}
+    education={item}
+    onEdit={() => {
+      setSelectedEducation(item);
+      setOpen(true);
+    }}
+    onDelete={() => handleDelete(item.id)}
+  />
+))
           )}
         </div>
       </Card>

@@ -1,4 +1,5 @@
 import { FolderOpen } from "lucide-react";
+import { motion } from "framer-motion";
 
 const EmptyState = ({
   title,
@@ -7,28 +8,62 @@ const EmptyState = ({
   icon: Icon = FolderOpen,
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-900 py-12 text-center">
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className="
+        flex
+        flex-col
+        items-center
+        justify-center
+        rounded-3xl
+        border
+        border-dashed
+        border-slate-700
+        bg-gradient-to-br
+        from-slate-900
+        via-slate-900
+        to-slate-800
+        px-8
+        py-14
+        text-center
+      "
+    >
+      <div
+        className="
+          mb-6
+          flex
+          h-20
+          w-20
+          items-center
+          justify-center
+          rounded-2xl
+          bg-blue-500/10
+          ring-1
+          ring-blue-500/20
+        "
+      >
+        <Icon
+          size={40}
+          className="text-blue-400"
+        />
+      </div>
 
-      <Icon
-        size={48}
-        className="mb-4 text-slate-500"
-      />
-
-      <h3 className="text-xl font-semibold text-white">
+      <h3 className="text-2xl font-bold text-white">
         {title}
       </h3>
 
-      <p className="mt-2 max-w-sm text-slate-400">
+      <p className="mt-3 max-w-md leading-7 text-slate-400">
         {description}
       </p>
 
       {action && (
-        <div className="mt-6">
+        <div className="mt-8">
           {action}
         </div>
       )}
-
-    </div>
+    </motion.div>
   );
 };
 

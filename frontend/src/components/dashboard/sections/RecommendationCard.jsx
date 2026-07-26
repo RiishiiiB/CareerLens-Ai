@@ -1,31 +1,74 @@
+import { Sparkles, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import Card from "../../ui/Card";
-import { Sparkles } from "lucide-react";
 
 const recommendations = [
-  "Complete your profile to 100%.",
-  "Upload your resume for ATS analysis.",
-  "Add at least 5 technical skills.",
-  "Add one project to improve visibility.",
+  {
+    title: "Complete your profile",
+    desc: "Reach 100% profile completion to improve recruiter visibility.",
+  },
+  {
+    title: "Upload your resume",
+    desc: "Get an ATS score and AI-powered resume suggestions.",
+  },
+  {
+    title: "Add technical skills",
+    desc: "Include at least 5 relevant technologies for better matching.",
+  },
+  {
+    title: "Showcase projects",
+    desc: "Projects significantly improve placement opportunities.",
+  },
 ];
 
 const RecommendationCard = () => {
   return (
     <Card className="h-full">
-      <div className="mb-5 flex items-center gap-2">
-        <Sparkles className="text-yellow-400" size={22} />
-        <h2 className="text-xl font-semibold text-white">
-          AI Recommendations
-        </h2>
+      <div className="mb-6 flex items-center gap-3">
+        <div className="rounded-xl bg-gradient-to-br from-violet-500 to-blue-500 p-3">
+          <Sparkles className="text-white" size={22} />
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold text-white">
+            AI Insights
+          </h2>
+
+          <p className="text-sm text-slate-400">
+            Personalized recommendations for your placement journey
+          </p>
+        </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {recommendations.map((item, index) => (
-          <div
+          <motion.div
             key={index}
-            className="rounded-lg border border-slate-700 bg-slate-800 p-4 text-slate-300"
+            whileHover={{
+              x: 6,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+            className="group cursor-pointer rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition-all duration-300 hover:border-violet-500/40 hover:bg-slate-800"
           >
-            {item}
-          </div>
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="font-semibold text-white">
+                  {item.title}
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-400">
+                  {item.desc}
+                </p>
+              </div>
+
+              <ArrowRight
+                size={18}
+                className="text-slate-500 transition group-hover:text-violet-400"
+              />
+            </div>
+          </motion.div>
         ))}
       </div>
     </Card>

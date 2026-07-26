@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
+
 import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
 import SkillModal from "./AddSkillModal";
-
+import SkillCard from "./SkillCard";
 import EmptyState from "../ui/EmptyState";
 import {
   getSkills,
@@ -93,40 +94,16 @@ const SkillsSection = () => {
                   />
           ) : (
             skills.map((skill) => (
-              <div
-                key={skill.id}
-                className="flex items-center justify-between rounded-xl bg-slate-800 p-4"
-              >
-                <div>
-                  <h3 className="font-medium text-white">
-                    {skill.name}
-                  </h3>
-
-                  <p className="text-sm capitalize text-slate-400">
-                    {skill.proficiency} • {skill.years_experience} yrs
-                  </p>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setSelectedSkill(skill);
-                      setOpen(true);
-                    }}
-                    className="text-blue-400 hover:text-blue-300"
-                  >
-                    <Pencil size={18} />
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(skill.id)}
-                    className="text-red-400 hover:text-red-300"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))
+  <SkillCard
+    key={skill.id}
+    skill={skill}
+    onEdit={() => {
+      setSelectedSkill(skill);
+      setOpen(true);
+    }}
+    onDelete={() => handleDelete(skill.id)}
+  />
+))
           )}
         </div>
       </Card>

@@ -5,11 +5,24 @@ import Button from "../ui/Button";
 import ProfileCompletionGauge from "./ProfileCompletionGauge";
 
 const HeroSection = ({
-  user,
   completion,
+  user,
 }) => {
   const navigate = useNavigate();
-
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12
+      ? "Good Morning ☀️"
+      : hour < 18
+      ? "Good Afternoon 🌤️"
+      : "Good Evening 🌙";
+// eslint-disable-next-line no-unused-vars
+const today = new Date().toLocaleDateString("en-IN", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
   return (
     <div className="mb-8 rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-8">
 
@@ -26,7 +39,7 @@ const HeroSection = ({
             />
 
             <h1 className="text-4xl font-bold text-white">
-              Good Afternoon, {user?.full_name}
+              {greeting}, {user?.full_name}
             </h1>
           </div>
 

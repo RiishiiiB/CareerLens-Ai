@@ -3,9 +3,8 @@ import toast from "react-hot-toast";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
 import SectionTitle from "../components/ui/SectionTitle";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
 
+import ProfileHero from "../components/profile/ProfileHero";
 import SkillsSection from "../components/profile/SkillsSection";
 import EditProfileModal from "../components/profile/EditProfileModal";
 import EducationSection from "../components/profile/EducationSection";
@@ -69,60 +68,11 @@ const Profile = () => {
         subtitle="Manage your personal information."
       />
 
-      <Card className="mt-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-white">
-              {user?.full_name}
-            </h2>
-
-            <p className="mt-2 text-slate-400">
-              {user?.email}
-            </p>
-          </div>
-
-          <Button onClick={() => setOpenModal(true)}>
-            Edit Profile
-          </Button>
-        </div>
-
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div>
-            <p className="text-slate-400">Headline</p>
-            <p className="text-white">
-              {profile?.headline || "Not Added"}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-slate-400">Bio</p>
-            <p className="text-white">
-              {profile?.bio || "Not Added"}
-            </p>
-          </div>
-
-          <div>
-  <p className="text-slate-400">
-    Professional Profile
-  </p>
-
-  <p className="text-white">
-    {profile?.portfolio_url ? (
-      <a
-        href={profile.portfolio_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-400 hover:underline"
-      >
-        View Profile
-      </a>
-    ) : (
-      "Not Added"
-    )}
-  </p>
-</div>
-        </div>
-      </Card>
+     <ProfileHero
+  user={user}
+  profile={profile}
+  onEdit={() => setOpenModal(true)}
+/>
 
       <SkillsSection />
        <EducationSection />

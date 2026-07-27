@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from google.genai.errors import ClientError
 from sqlalchemy.orm import Session
 from app.schemas.gemini import (
     ResumeAnalysisResponse,
@@ -83,19 +84,53 @@ def analyze_resume(
     "/career-roadmap/{role}",
     response_model=CareerRoadmapResponse,
 )
-async def generate_career_roadmap(
-    role: str,
-):
+async def generate_career_roadmap(role: str):
     from app.services.gemini_service import GeminiService
 
-    return await GeminiService().generate_career_roadmap(role)
+    try:
+        return await GeminiService().generate_career_roadmap(role)
+
+    except ClientError as e:
+        if "RESOURCE_EXHAUSTED" in str(e):
+            raise HTTPException(
+                status_code=429,
+                detail="AI quota exceeded. Please try again later."
+            )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate career roadmap."
+        )
+
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Something went wrong while generating the roadmap."
+        )
 @router.post(
     "/company-recommendations/{role}",
     response_model=CompanyRecommendationResponse,
 )
-async def generate_company_recommendations(
-    role: str,
-):
+async def generate_company_recommendations(role: str):
     from app.services.gemini_service import GeminiService
 
-    return await GeminiService().generate_company_recommendations(role)
+    try:
+        return await GeminiService().generate_company_recommendations(role)
+
+    except ClientError as e:
+        if "RESOURCE_EXHAUSTED" in str(e):
+            raise HTTPException(
+                status_code=429,
+                detail="AI quota exceeded. Please try again later."
+            )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate company recommendations."
+        )
+
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Something went wrong while generating recommendations."
+        )

@@ -34,11 +34,17 @@ export default function CareerRoadmap() {
 
       toast.success("Career roadmap generated successfully");
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to generate roadmap");
-    } finally {
-      setLoading(false);
-    }
+  console.error(error);
+
+  if (error.response?.status === 429) {
+    toast.error("⚠️ AI quota exceeded. Please try again later.");
+  } else {
+    toast.error(
+      error.response?.data?.detail ||
+      "Failed to generate roadmap."
+    );
+  }
+}
   };
 
   return (

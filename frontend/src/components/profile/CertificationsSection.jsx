@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
 import CertificationModal from "./CertificationModal";
-
+import CertificationCard from "./CertificationCard";
 import EmptyState from "../ui/EmptyState";
 import {
   getCertifications,
@@ -92,45 +92,17 @@ const CertificationsSection = () => {
               description="Highlight your certifications and achievements."
                  />
           ) : (
-            certifications.map((cert) => (
-              <div
-                key={cert.id}
-                className="flex items-center justify-between rounded-xl bg-slate-800 p-4"
-              >
-                <div>
-                  <h3 className="font-medium text-white">
-                    {cert.name}
-                  </h3>
-
-                  <p className="text-slate-400">
-                    {cert.issuing_organization}
-                  </p>
-
-                  <p className="text-sm text-slate-500">
-                    {cert.issue_date}
-                  </p>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setSelectedCertification(cert);
-                      setOpen(true);
-                    }}
-                    className="text-blue-400 hover:text-blue-300"
-                  >
-                    <Pencil size={18} />
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(cert.id)}
-                    className="text-red-400 hover:text-red-300"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))
+          certifications.map((cert) => (
+  <CertificationCard
+    key={cert.id}
+    certification={cert}
+    onEdit={() => {
+      setSelectedCertification(cert);
+      setOpen(true);
+    }}
+    onDelete={() => handleDelete(cert.id)}
+  />
+))
           )}
         </div>
       </Card>

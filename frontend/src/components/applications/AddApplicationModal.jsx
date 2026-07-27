@@ -1,6 +1,6 @@
 import { useState } from "react";
 import applicationService from "../../services/applicationService";
-
+import toast from "react-hot-toast";
 const initialForm = {
   company_name: "",
   role: "",
@@ -35,15 +35,22 @@ export default function AddApplicationModal({
       setLoading(true);
 
       await applicationService.createApplication(formData);
+      toast.success(
+    "Application added successfully!"
+);
 
       setFormData(initialForm);
 
       onSuccess();
       onClose();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to add application.");
-    } finally {
+    }catch (error) {
+    console.error(error);
+
+    toast.error(
+        error.response?.data?.detail ||
+        "Failed to add application."
+    );
+} finally {
       setLoading(false);
     }
   };
@@ -112,7 +119,10 @@ export default function AddApplicationModal({
             className="w-full rounded-xl border border-white/10 bg-[#1F1F1F] px-4 py-3 text-white outline-none transition focus:border-[#FF6B35] focus:ring-2 focus:ring-[#FF6B35]/20"
           >
             <option>Applied</option>
+            <option>Online Assessment</option>
+            <option>Shortlisted</option>
             <option>Interview</option>
+            <option>HR Interview</option>
             <option>Offer</option>
             <option>Rejected</option>
           </select>

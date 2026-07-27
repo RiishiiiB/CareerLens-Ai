@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import {
   FolderGit2,
-  Github,
+
   ExternalLink,
   Pencil,
   Trash2,
@@ -9,11 +9,12 @@ import {
 } from "lucide-react";
 
 const ProjectCard = ({ project, onEdit, onDelete }) => {
-  const technologies =
-    project.tech_stack
-      ?.split(",")
-      .map((tech) => tech.trim())
-      .filter(Boolean) || [];
+ const technologies = Array.isArray(project.tech_stack)
+  ? project.tech_stack
+  : project.tech_stack
+    ?.split(",")
+    .map((tech) => tech.trim())
+    .filter(Boolean) || [];
 
   return (
     <motion.div
@@ -146,9 +147,9 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
 
       <div className="mt-6 flex flex-wrap gap-3">
 
-        {project.github_url && (
+        {project.repository_url && (
           <a
-            href={project.github_url}
+           href={project.repository_url}
             target="_blank"
             rel="noreferrer"
             className="
@@ -166,14 +167,14 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
               hover:text-white
             "
           >
-            <Github size={18} />
+            <FolderGit2 size={18} />
             GitHub
           </a>
         )}
 
-        {project.live_url && (
+        {project.project_url && (
           <a
-            href={project.live_url}
+            href={project.project_url}
             target="_blank"
             rel="noreferrer"
             className="

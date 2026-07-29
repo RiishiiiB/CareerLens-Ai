@@ -189,3 +189,72 @@ Requirements:
         data = json.loads(text)
 
         return CompanyRecommendationResponse(**data)
+async def generate_mock_interview(
+    self,
+    role: str,
+    difficulty: str,
+):
+    prompt = f"""
+You are an expert technical interviewer.
+
+Generate exactly 5 interview questions.
+
+Role:
+{role}
+
+Difficulty:
+{difficulty}
+
+Return ONLY valid JSON.
+
+Format:
+
+{{
+  "questions": [
+    {{
+      "id": 1,
+      "question": "Question here"
+    }},
+    {{
+      "id": 2,
+      "question": "Question here"
+    }},
+    {{
+      "id": 3,
+      "question": "Question here"
+    }},
+    {{
+      "id": 4,
+      "question": "Question here"
+    }},
+    {{
+      "id": 5,
+      "question": "Question here"
+    }}
+  ]
+}}
+
+Rules:
+
+- Questions should match the selected role.
+- Questions should match the selected difficulty.
+- Do not include explanations.
+- Do not include answers.
+- Return JSON only.
+"""
+
+    response = self.client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
+
+    text = response.text.strip()
+
+    if text.startswith("```"):
+        text = (
+            text.replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
+
+    return json.loads(text)

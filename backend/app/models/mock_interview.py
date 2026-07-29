@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, String,  ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from app.db.base import Base
@@ -13,7 +14,7 @@ class MockInterview(Base):
 
     difficulty = Column(String, nullable=False)
 
-    questions = Column(Text, nullable=False)
+    questions = Column(JSONB, nullable=False)
 
     profile_id = Column(
         Integer,

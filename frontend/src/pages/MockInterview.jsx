@@ -1,128 +1,271 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
-import { getCurrentUser } from "../services/authService";
+import InterviewQuestion from "../components/mockInterview/InterviewQuestion";
+import FeedbackCard from "../components/mockInterview/FeedbackCard";
+import InterviewSummary from "../components/mockInterview/InterviewSummary";
+import LoadingInterview from "../components/mockInterview/LoadingInterview";
+
 import mockInterviewService from "../services/mockInterviewService";
 
 export default function MockInterview() {
-  const [user, setUser] = useState(null);
-
-  const [role, setRole] = useState("Software Engineer");
-  const [difficulty, setDifficulty] = useState("Medium");
+  const [role, setRole] = useState("");
+  const [difficulty, setDifficulty] = useState("Intermediate");
+  const [questionCount, setQuestionCount] = useState(5);
 
   const [loading, setLoading] = useState(false);
-  const [interview, setInterview] = useState(null);
+  const [started, setStarted] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/immutability
-    loadUser();
-  }, []);
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  async function loadUser() {
-    try {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  const [answer, setAnswer] = useState("");
+  const [feedback, setFeedback] = useState(null);
+  const [summary, setSummary] = useState(null);
+
+  const [answers, setAnswers] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [evaluations, setEvaluations] = useState([]);
 
   const generateInterview = async () => {
+    if (!role.trim()) {
+      toast.error("Please enter a job role.");
+      return;
+    }
+
     try {
       setLoading(true);
 
-      const data =
+      const response =
         await mockInterviewService.generateInterview({
           role,
           difficulty,
+          question_count: Number(questionCount),
         });
 
-      setInterview(data);
+      const generatedQuestions =
+        response.questions || [];
+
+      setQuestions(generatedQuestions);
+      setStarted(true);
+      setCompleted(false);
+
+      setCurrentQuestion(0);
+
+      setAnswer("");
+      setFeedback(null);
+      setSummary(null);
+
+      setAnswers([]);
+      setEvaluations([]);
     } catch (err) {
       console.error(err);
-      alert("Failed to generate interview.");
+      toast.error("Failed to generate interview.");
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <DashboardLayout user={user}>
-      <div className="min-h-screen p-8">
+  const submitAnswer = async () => {
+    if (!answer.trim()) return;
 
-        <div className="mx-auto max-w-5xl">
+    try {
+      setLoading(true);
 
-          <h1 className="text-4xl font-bold text-white">
-            AI Mock Interview
-          </h1>
+      const current =
+        questions[currentQuestion];
 
-          <p className="mt-2 text-slate-400">
-            Practice before your real interview.
-          </p>
+      const result =
+        await mockInterviewService.evaluateAnswer({
+          question: current.question,
+          answer,
+          role,
+        });
 
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
+      setFeedback(result);
 
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              style={{
-  backgroundColor: "#0f172a",
-  color: "#ffffff",
-}}
-              className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-            >
-              <option>Software Engineer</option>
-              <option>Data Analyst</option>
-              <option>Data Scientist</option>
-              <option>Frontend Developer</option>
-              <option>Backend Developer</option>
-            </select>
+      setAnswers((prev) => [
+        ...prev,
+        {
+          question: current.question,
+          answer,
+        },
+      ]);
 
-            <select
-              value={difficulty}
-              onChange={(e) =>
-                setDifficulty(e.target.value)
-              }
-                     style={{
-  backgroundColor: "#0f172a",
-  color: "#ffffff",
-}}
-              className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-            >
-            
-              <option>Easy</option>
-              <option>Medium</option>
-              <option>Hard</option>
-            </select>
+      setEvaluations((prev) => [
+        ...prev,
+        result,
+      ]);
+    } catch (err) {
+      console.error(err);
+      toast.error("Evaluation failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-          </div>
+  const nextQuestion = async () => {
+    const isLast =
+      currentQuestion === questions.length - 1;
 
-          <button
-            onClick={generateInterview}
-            disabled={loading}
-            className="mt-6 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
-          >
-            {loading
-              ? "Generating..."
-              : "Generate Interview"}
-          </button>
+    if (!isLast) {
+      setCurrentQuestion((prev) => prev + 1);
+      setAnswer("");
+      setFeedback(null);
+      return;
+    }
 
-          {interview && (
-            <div className="mt-8 rounded-2xl border border-white/10 bg-[#151515] p-6">
+    try {
+      setLoading(true);
 
-              <h2 className="mb-4 text-2xl font-bold text-white">
-                Generated Questions
-              </h2>
+      const result =
+        await mockInterviewService.generateSummary({
+          role,
+          difficulty,
+           questions: questions.map((q) => q.question),
+           answers: answers.map((a) => a.answer),
+        });
 
-              <pre className="whitespace-pre-wrap text-slate-300">
-                {interview.questions}
-              </pre>
+      setSummary(result);
+      setCompleted(true);
+      setFeedback(null);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate summary.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const restartInterview = () => {
+    setStarted(false);
+    setCompleted(false);
+
+    setQuestions([]);
+    setCurrentQuestion(0);
+
+    setAnswer("");
+    setFeedback(null);
+    setSummary(null);
+
+    setAnswers([]);
+    setEvaluations([]);
+
+    setRole("");
+    setDifficulty("Intermediate");
+    setQuestionCount(5);
+  };
+
+  const downloadReport = () => {
+    toast.success(
+      "PDF export will be added in the next sprint."
+    );
+  };
+    return (
+    <DashboardLayout>
+      <div className="mx-auto max-w-6xl p-8">
+        {!started && (
+          <div className="rounded-3xl border border-slate-700 bg-slate-900/80 p-8 shadow-xl">
+            <h1 className="mb-8 text-4xl font-bold text-white">
+              AI Mock Interview
+            </h1>
+
+            <div className="space-y-6">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-300">
+                  Job Role
+                </label>
+
+                <input
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  placeholder="Frontend Developer"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">
+                    Difficulty
+                  </label>
+
+                  <select
+                    value={difficulty}
+                    onChange={(e) =>
+                      setDifficulty(e.target.value)
+                    }
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white"
+                  >
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">
+                    Questions
+                  </label>
+
+                  <input
+                    type="number"
+                    min="3"
+                    max="10"
+                    value={questionCount}
+                    onChange={(e) =>
+                      setQuestionCount(e.target.value)
+                    }
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={generateInterview}
+                className="rounded-xl bg-blue-600 px-8 py-3 font-semibold text-white hover:bg-blue-500"
+              >
+                Generate Interview
+              </button>
             </div>
-          )}
+          </div>
+        )}
 
-        </div>
+        {loading && !started && <LoadingInterview />}
 
+        {started && !completed && (
+          <>
+            <InterviewQuestion
+              questionNumber={currentQuestion + 1}
+              totalQuestions={questions.length}
+              question={questions[currentQuestion]?.question}
+              answer={answer}
+              setAnswer={setAnswer}
+              onSubmit={submitAnswer}
+              loading={loading}
+            />
+
+            <div className="mt-8">
+              <FeedbackCard
+                feedback={feedback}
+                onNext={nextQuestion}
+                isLastQuestion={
+                  currentQuestion === questions.length - 1
+                }
+              />
+            </div>
+          </>
+        )}
+
+        {completed && (
+          <InterviewSummary
+            summary={summary}
+            onRestart={restartInterview}
+            onDownload={downloadReport}
+          />
+        )}
       </div>
     </DashboardLayout>
   );

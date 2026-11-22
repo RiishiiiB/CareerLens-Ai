@@ -38,15 +38,13 @@ export default function MockInterview() {
     try {
       setLoading(true);
 
-      const response =
-        await mockInterviewService.generateInterview({
-          role,
-          difficulty,
-          question_count: Number(questionCount),
-        });
+      const response = await mockInterviewService.generateInterview({
+        role,
+        difficulty,
+        question_count: Number(questionCount),
+      });
 
-      const generatedQuestions =
-        response.questions || [];
+      const generatedQuestions = response.questions || [];
 
       setQuestions(generatedQuestions);
       setStarted(true);
@@ -74,15 +72,13 @@ export default function MockInterview() {
     try {
       setLoading(true);
 
-      const current =
-        questions[currentQuestion];
+      const current = questions[currentQuestion];
 
-      const result =
-        await mockInterviewService.evaluateAnswer({
-          question: current.question,
-          answer,
-          role,
-        });
+      const result = await mockInterviewService.evaluateAnswer({
+        question: current.question,
+        answer,
+        role,
+      });
 
       setFeedback(result);
 
@@ -94,10 +90,7 @@ export default function MockInterview() {
         },
       ]);
 
-      setEvaluations((prev) => [
-        ...prev,
-        result,
-      ]);
+      setEvaluations((prev) => [...prev, result]);
     } catch (err) {
       console.error(err);
       toast.error("Evaluation failed.");
@@ -107,8 +100,7 @@ export default function MockInterview() {
   };
 
   const nextQuestion = async () => {
-    const isLast =
-      currentQuestion === questions.length - 1;
+    const isLast = currentQuestion === questions.length - 1;
 
     if (!isLast) {
       setCurrentQuestion((prev) => prev + 1);
@@ -120,13 +112,12 @@ export default function MockInterview() {
     try {
       setLoading(true);
 
-      const result =
-        await mockInterviewService.generateSummary({
-          role,
-          difficulty,
-           questions: questions.map((q) => q.question),
-           answers: answers.map((a) => a.answer),
-        });
+      const result = await mockInterviewService.generateSummary({
+        role,
+        difficulty,
+        questions: questions.map((q) => q.question),
+        answers: answers.map((a) => a.answer),
+      });
 
       setSummary(result);
       setCompleted(true);
@@ -159,11 +150,10 @@ export default function MockInterview() {
   };
 
   const downloadReport = () => {
-    toast.success(
-      "PDF export will be added in the next sprint."
-    );
+    toast.success("PDF export will be added in the next sprint.");
   };
-    return (
+
+  return (
     <DashboardLayout>
       <div className="mx-auto max-w-6xl p-8">
         {!started && (
@@ -194,14 +184,18 @@ export default function MockInterview() {
 
                   <select
                     value={difficulty}
-                    onChange={(e) =>
-                      setDifficulty(e.target.value)
-                    }
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white"
+                    onChange={(e) => setDifficulty(e.target.value)}
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-blue-500"
                   >
-                    <option>Beginner</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
+                    <option className="bg-slate-900 text-white">
+                      Beginner
+                    </option>
+                    <option className="bg-slate-900 text-white">
+                      Intermediate
+                    </option>
+                    <option className="bg-slate-900 text-white">
+                      Advanced
+                    </option>
                   </select>
                 </div>
 
@@ -215,10 +209,8 @@ export default function MockInterview() {
                     min="3"
                     max="10"
                     value={questionCount}
-                    onChange={(e) =>
-                      setQuestionCount(e.target.value)
-                    }
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white"
+                    onChange={(e) => setQuestionCount(e.target.value)}
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -251,9 +243,7 @@ export default function MockInterview() {
               <FeedbackCard
                 feedback={feedback}
                 onNext={nextQuestion}
-                isLastQuestion={
-                  currentQuestion === questions.length - 1
-                }
+                isLastQuestion={currentQuestion === questions.length - 1}
               />
             </div>
           </>

@@ -1,4 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+
+/* ==========================================
+   GLOBAL TYPOGRAPHY
+========================================== */
+
+:root {
+  --font-body: "Inter", sans-serif;
+  --font-heading: "Sora", sans-serif;
+}
+
+html {
+  font-family: var(--font-body);
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
 
 /* ==========================================
    GLOBAL FORM CONTROLS
@@ -9,6 +41,7 @@ textarea,
 select {
   color: inherit;
   background-color: inherit;
+  font-family: var(--font-body);
 }
 
 input::placeholder,
@@ -29,7 +62,7 @@ textarea::placeholder {
 [class*="bg-[#"] input,
 [class*="bg-[#"] textarea,
 [class*="bg-[#"] select {
-  color: #F8FAFC;
+  color: #f8fafc;
 }
 
 /* ==========================================
@@ -41,7 +74,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
-  -webkit-text-fill-color: #F8FAFC !important;
+  -webkit-text-fill-color: #f8fafc !important;
   -webkit-box-shadow: 0 0 0 1000px #111111 inset !important;
   box-shadow: 0 0 0 1000px #111111 inset !important;
   transition: background-color 99999s ease-in-out 0s;

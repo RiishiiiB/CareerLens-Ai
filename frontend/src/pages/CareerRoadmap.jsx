@@ -31,29 +31,27 @@ export default function CareerRoadmap() {
       const data = await generateCareerRoadmap(role);
 
       setRoadmap(data);
-
       toast.success("Career roadmap generated successfully");
     } catch (error) {
-  console.error(error);
+      console.error(error);
 
-  if (error.response?.status === 429) {
-    toast.error("⚠️ AI quota exceeded. Please try again later.");
-  } else {
-    toast.error(
-      error.response?.data?.detail ||
-      "Failed to generate roadmap."
-    );
-  }
-}
+      if (error.response?.status === 429) {
+        toast.error("AI quota exceeded. Please try again later.");
+      } else {
+        toast.error(
+          error.response?.data?.detail || "Failed to generate roadmap."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <DashboardLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-4xl font-bold text-white">
-            Career Roadmap
-          </h1>
+          <h1 className="text-4xl font-bold text-white">Career Roadmap</h1>
 
           <p className="mt-2 text-slate-400">
             Generate a personalized AI roadmap to reach your dream career.
@@ -68,12 +66,19 @@ export default function CareerRoadmap() {
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
+            style={{ colorScheme: "dark" }}
             className="w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-white outline-none"
           >
-            <option value="">Select Target Role</option>
+            <option className="bg-slate-950 text-white" value="">
+              Select Target Role
+            </option>
 
             {roles.map((item) => (
-              <option key={item} value={item}>
+              <option
+                className="bg-slate-950 text-white"
+                key={item}
+                value={item}
+              >
                 {item}
               </option>
             ))}

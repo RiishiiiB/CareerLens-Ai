@@ -17,6 +17,7 @@ app = FastAPI(
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
+    "https://career-lens-ai-eta-nine.vercel.app",
 ]
 
 app.add_middleware(
